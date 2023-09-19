@@ -25,7 +25,7 @@ const bodyParser = require("body-parser");
 // db.once("open", () => console.log("Connected to database"));
 
 const corsOptions = {
-  origin: ["https://adamjanovski.github.io/restaurant-booking-app", "https://adamjanovski.github.io/restaurant-booking-dashboard"],
+  origin: ["https://adamjanovski.github.io/restaurant-booking-app/", "https://adamjanovski.github.io/restaurant-booking-dashboard"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Enable cookies or authorization headers if needed
 };

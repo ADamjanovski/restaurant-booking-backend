@@ -1,0 +1,35 @@
+const mongoose = require("mongoose");
+
+const restaurantSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  categories: [
+    {
+      type: String,
+    },
+  ],
+  email: {
+    type: String,
+    required: true,
+  },
+  logo: {
+    type: String,
+    required: true,
+    select: false,
+  },
+  scoreOfRating: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  numberOfRating: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+});
+r.plugin(mongoosePaginate);
+
+module.exports = mongoose.model("Restaurant", restaurantSchema);

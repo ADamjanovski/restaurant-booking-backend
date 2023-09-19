@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  name         String?
+  username     String         @unique
+  lastName     String
+  password     String
+  reservations Reservations[]
+  createdAt    DateTime       @default(now())
+  token        Token?
+}
+
+model Reservations {
+  id           Int        @id @default(autoincrement())
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  customer     User       @relation(fields: [customerId], references: [id])
+  customerId   Int
+  table        Tables     @relation(fields: [tableId], references: [id])
+  tableId      Int
+  datetime     DateTime
+  status       Status     @default(PENDING)
+}
+
+model Restaurant {
+  id             Int              @id @default(autoincrement())
+  name           String
+  reservations   Reservations[]
+  email          String
+  scoreOfRating  Int
+  numberOfRating Int
+  numberOfTables Int
+  logo           String
+  Tables         Tables[]
+  categories     Categories[]
+  restaurantUser restaurantUser[]
+}
+
+model Tables {
+  id            Int            @id @default(autoincrement())
+  restaurant    Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurantId  Int
+  numberOfSeats Int
+  Reservations  Reservations[]
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  token     String
+  createdAt DateTime @default(now())
+}
+
+model Categories {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  restaurant Restaurant[]
+}
+
+model restaurantUser {
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  name       String?
+  username   String     @unique
+  password   String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  createdAt  DateTime   @default(now())
+  restaurantId Int
+  role Role
+}
+
+enum Status {
+  CONFIRMED
+  PENDING
+  DECLINED
+}

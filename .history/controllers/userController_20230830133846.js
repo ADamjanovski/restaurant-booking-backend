@@ -1,0 +1,78 @@
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+
+class UserController {
+  async index(req, res) {
+    // res.set("Access-Control-Allow-Origin", "*");
+    try {
+      const user = await User.find();
+      return res.json(user);
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  async create(req, res) {
+    const hashedPassword = await bcrypt.hash(req.body.password,10);
+
+    const user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+
+    try {
+      const newUser = await user.save();
+      return res.status(201).json(newUser);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
+  show(req, res) {
+    return res.json(res.order);
+  }
+
+  async patch(req, res) {
+    if (req.body.name != null) {
+      res.order.name = req.body.name;
+    }
+    if (req.body.price != null) {
+      res.order.price = req.body.price;
+    }
+    if (req.body.description != null) {
+      res.order.description = req.body.description;
+    }
+    try {
+      const updatedOrder = await res.order.save();
+      res.json(updatedOrder);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      await res.order.deleteOne();
+      res.json({ message: "Successfully deleted" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async getUser(req, res, next) {
+    let user;
+    try {
+      user = await User.findById(req.params.id);
+      if (user == null) {
+        return res.status(404).json({ message: "Cannot find user" });
+      }
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    res.user = user;
+    next();
+  }
+}
+
+module.exports = UserController;

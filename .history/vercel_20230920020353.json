@@ -1,0 +1,13 @@
+{
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/node",
+        "config": {
+          "prismaGenerate": true // Add this line to run prisma generate
+        }
+      }
+    ],
+
+  }
+  

@@ -35,4 +35,4 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(express.json());
 app.use(routes);
-app.listen(process.env.PORT, () => console.log("Server has started"));
+app.listen(process.env.PORT || PORT, () => console.log("Server has started"));
